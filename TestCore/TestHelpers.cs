@@ -31,7 +31,9 @@ namespace TestCore
         [Test]
         public void TestPasswordHelperReturnsFalse()
         {
-            Assert.Pass(); //Zelf uitwerken
+            string password = "user1";
+            string invalidPasswordHash = "IunRhDKa+fWo8+4/Qfj7Pg==.kDxZnUQHCZun6gLIE6d9oeULLRIuRmxmH2QKJv2IM08";
+            Assert.IsFalse(PasswordHelper.VerifyPassword(password, invalidPasswordHash));
         }
 
         [TestCase("user1", "IunRhDKa+fWo8+4/Qfj7Pg==.kDxZnUQHCZun6gLIE6d9oeULLRIuRmxmH2QKJv2IM081")]
