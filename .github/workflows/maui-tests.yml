@@ -14,7 +14,7 @@ on:
  
 jobs:
   build:
-    runs-on: ubuntu-latest  # Of windows-latest/macOS-latest als specifiek platform nodig is
+    runs-on: windows-latest  # Of windows-latest/macOS-latest als specifiek platform nodig is
     steps:
       - name: Haal de repository op
         uses: actions/checkout@v4
