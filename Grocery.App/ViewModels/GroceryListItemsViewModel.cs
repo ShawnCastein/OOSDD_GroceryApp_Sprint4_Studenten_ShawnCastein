@@ -1,11 +1,11 @@
-﻿using CommunityToolkit.Maui.Alerts;
+﻿using System.Collections.ObjectModel;
+using System.Text.Json;
+using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Grocery.App.Views;
 using Grocery.Core.Interfaces.Services;
 using Grocery.Core.Models;
-using System.Collections.ObjectModel;
-using System.Text.Json;
 
 namespace Grocery.App.ViewModels
 {
@@ -15,6 +15,8 @@ namespace Grocery.App.ViewModels
         private readonly IGroceryListItemsService _groceryListItemsService;
         private readonly IProductService _productService;
         private readonly IFileSaverService _fileSaverService;
+        private readonly GlobalViewModel _global;
+
         private string searchText = "";
 
         public ObservableCollection<GroceryListItem> MyGroceryListItems { get; set; } = [];
@@ -25,11 +27,12 @@ namespace Grocery.App.ViewModels
         [ObservableProperty]
         string myMessage;
 
-        public GroceryListItemsViewModel(IGroceryListItemsService groceryListItemsService, IProductService productService, IFileSaverService fileSaverService)
+        public GroceryListItemsViewModel(IGroceryListItemsService groceryListItemsService, IProductService productService, IFileSaverService fileSaverService, GlobalViewModel global)
         {
             _groceryListItemsService = groceryListItemsService;
             _productService = productService;
             _fileSaverService = fileSaverService;
+            _global = global;
             Load(groceryList.Id);
         }
 
@@ -118,6 +121,22 @@ namespace Grocery.App.ViewModels
             item.Product.Stock++;
             _productService.Update(item.Product);
             OnGroceryListChanged(GroceryList);
+        }
+
+        [RelayCommand]
+        public void ShowBoughtProducts()
+        {
+            // Als de Client de rol admin heeft dan navigeer je naar BoughtProductsView. Anders doe je niets.
+            // Stap 1: Verkrijg de huidige client (bijvoorbeeld via een service of context)
+            // Stap 2: Controleer of de client de rol "admin" heeft
+            // Stap 3: Navigeer naar BoughtProductsView als admin
+
+            // Voorbeeld implementatie (pas aan indien Client/rol service/context anders is):
+            Client? client = _global.Client;
+            if (client != null && client.UserRole == Client.Role.Admin)
+            {
+                Shell.Current.GoToAsync(nameof(Views.BoughtProductsView));
+            }
         }
     }
 }
