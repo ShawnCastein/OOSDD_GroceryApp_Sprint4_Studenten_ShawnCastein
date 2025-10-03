@@ -23,15 +23,15 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
- 
+
       - name: Install MAUI Workload
         run: dotnet workload install maui
- 
-      - name: Herstel afhankelijkheden
+        
+      - name: Restore NuGet packages
         run: dotnet restore
- 
-      - name: Bouw de applicatie
-        run: dotnet build --configuration Release --no-restore
- 
+        
+      - name: Build solution
+        run: dotnet build --configuration Release
+
       - name: Voer unit tests uit
         run: dotnet test --configuration Release --no-restore --no-build --verbosity normal
