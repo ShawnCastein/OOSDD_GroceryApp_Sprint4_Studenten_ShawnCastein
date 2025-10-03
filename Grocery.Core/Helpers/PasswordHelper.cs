@@ -16,12 +16,18 @@ namespace Grocery.Core.Helpers
         {
             var parts = storedHash.Split('.');
             if (parts.Length != 2) return false;
+            try
+            {
+                var salt = Convert.FromBase64String(parts[0]);
+                var hash = Convert.FromBase64String(parts[1]);
+                var inputHash = Rfc2898DeriveBytes.Pbkdf2(Encoding.UTF8.GetBytes(password), salt, 100000, HashAlgorithmName.SHA256, 32);
 
-            var salt = Convert.FromBase64String(parts[0]);
-            var hash = Convert.FromBase64String(parts[1]);
-            var inputHash = Rfc2898DeriveBytes.Pbkdf2(Encoding.UTF8.GetBytes(password), salt, 100000, HashAlgorithmName.SHA256, 32);
-
-            return CryptographicOperations.FixedTimeEquals(inputHash, hash);
+                return CryptographicOperations.FixedTimeEquals(inputHash, hash);
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
         }
     }
 }
